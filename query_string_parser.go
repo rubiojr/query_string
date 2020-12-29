@@ -164,7 +164,9 @@ func queryStringNumberToken(field, str string) (bluge.Query, error) {
 		return nil, fmt.Errorf("error parsing number: %v", err)
 	}
 	q2 := bluge.NewNumericRangeInclusiveQuery(val, val, true, true).SetField(field)
-	return bluge.NewBooleanQuery().AddShould([]bluge.Query{q1, q2}...), nil
+	q := bluge.NewBooleanQuery()
+	q.SetMinShould(1)
+	return q.AddShould([]bluge.Query{q1, q2}...), nil
 }
 
 func queryStringPhraseToken(field, str string) *bluge.MatchPhraseQuery {
